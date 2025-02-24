@@ -84,5 +84,6 @@ fn main() {
     let seq2seq_cfg = Seq2SeqConfig::new(token.count as usize, 32, token.count as usize, 0.3);
     let seq2seq_model = seq2seq_cfg.init::<MyBackend>(&device);
 
-    seq2seq_model.encoder_forward(_input_tensor);
+    let state = seq2seq_model.encoder_forward(_input_tensor);
+    seq2seq_model.decoder_forward(state);
 }

@@ -4,6 +4,7 @@ use burn::{
     config::Config,
     nn::{
         Dropout, DropoutConfig, Embedding, EmbeddingConfig, Linear, LinearConfig, Lstm, LstmConfig,
+        LstmState,
     },
     prelude::Backend,
     tensor::{Int, Tensor},
@@ -31,8 +32,15 @@ impl<B: Backend> Seq2Seq<B> {
         state
     }
 
-    pub fn decoder_forward(&self) {
+    pub fn decoder_forward(&self, state: LstmState<B, 2>) {
         let input: Tensor<B, 2, Int> = Tensor::from([[0]]);
+
+        let embedded = self
+            .dropout_decoder
+            .forward(self.embedding_decoder.forward(input));
+
+        let lstm = self.lstm_decoder.forward(embedded, Some(state));
+        println!("{}", lstm.0);
     }
 }
 
