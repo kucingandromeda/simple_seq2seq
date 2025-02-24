@@ -80,4 +80,9 @@ fn main() {
     let output_tensor_copy = output_tensor.clone();
     let _output_tensor = Tensor::cat(output_tensor, 0);
     let epoch = 100;
+
+    let seq2seq_cfg = Seq2SeqConfig::new(token.count as usize, 32, token.count as usize, 0.3);
+    let seq2seq_model = seq2seq_cfg.init::<MyBackend>(&device);
+
+    seq2seq_model.encoder_forward(_input_tensor);
 }
